@@ -1,0 +1,4 @@
+100;nabila;amiour;5500
+200;mohammed;kihal;7800
+300;samy;kihal;8000
+400;nesrine;amiour;4000
