@@ -318,13 +318,14 @@ public static void afficherTout() throws IOException
 public static void ModifierSalaire() throws IOException
 
 {
+  String nom;
+  String prenom;
+  Double salaire;
   sortie = new RandomAccessFile(fichier, "rw");
   Double nouveauSalaire;
   Long pos;
   int num; int id;
-  String nom;
-  String prenom;
-  Double salaire;
+
   boolean trouv=false;
   int i=0;
   num=Integer.parseInt(JOptionPane.showInputDialog("Entrer le numero de l employe:"));
@@ -338,7 +339,7 @@ public static void ModifierSalaire() throws IOException
         trouv=true;
         System.out.println("pas trouvee");
       }
-      nom=sortie.readUTF();
+     nom=sortie.readUTF();
       
       prenom=sortie.readUTF();
      
