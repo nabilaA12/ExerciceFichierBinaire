@@ -47,6 +47,7 @@ public class Employe {
           
           ligne = data.readLine();
           }
+          sortie.close();
     }
     /////////// formatter strings///////////////
     public static String formaterString(String leString, int tailleMax){
@@ -84,40 +85,31 @@ public static void afficherTout() throws IOException
    // System.out.println("je suis la");
    sortie = new RandomAccessFile(fichier, "rw");
    
-     int compteur=0;
-     String nom;
-     String prenom;
-
+     int compteur=0,id;
+     String nom,prenom;
      double salaire;
+   //  int i=0;
 
-     int i=0;
-
-    // File f=new File("employe.dat");
-    
-   
     try
     {
       afficherEntete();
       while(true)
         {
           
-          sortie.seek(i);
-            int id = sortie.readInt();
-            System.out.println(sortie.getFilePointer());
-            nom=sortie.readUTF();
-            System.out.println(sortie.getFilePointer());
-            prenom=sortie.readUTF();
-            System.out.println(sortie.getFilePointer());
-            salaire=sortie.readDouble();
-            System.out.println(sortie.getFilePointer());
-            affichage.append(String.format("%-20s %-20s %-25s %-25s",id,nom,prenom,salaire)+"\n");
+         // sortie.seek(i);
+             id = sortie.readInt();
+             nom=sortie.readUTF();
+             prenom=sortie.readUTF();
+             salaire=sortie.readDouble();
+           //  i+=t_enreg;
+         if(id!=-1 && id!=0){
+           affichage.append(String.format("%-20s %-20s %-25s %-25s",id,nom,prenom,salaire)+"\n");
            System.out.println("Numero: "+ id +"\n" + "Prenom: "+ prenom + "\n" +"Nom: "+nom + "\n" +"Salaire: "+salaire+"\n");
-     
-            i+=t_enreg;
-            compteur++;
-
-            
-
+           
+           
+            compteur++;}
+          
+      
         }
         
     }
@@ -126,6 +118,7 @@ public static void afficherTout() throws IOException
         System.out.println("Total number " + compteur);
         affichage.append("Nombre d employes : " + compteur);
         System.out.println("End of file reached!");
+        sortie.close();
     }
   
   }
@@ -137,13 +130,13 @@ public static void afficherTout() throws IOException
 
     long pos;
 
-    int num;
+    int num,id;
 
-    String nom;
-    String prenom;
-    int i=0;
+    String nom,prenom;
+  
+    //int i=0;
     double salaire;
-    int id;
+    
     Boolean trouv=false;
 
     num=Integer.parseInt(JOptionPane.showInputDialog("Entrer le numero de l'employe a afficher:"));
@@ -151,7 +144,7 @@ public static void afficherTout() throws IOException
       while(true)
       {
         
-          sortie.seek(i);
+     //     sortie.seek(i);
           id = sortie.readInt();
           if(id==num){
             trouv=true;
@@ -164,7 +157,7 @@ public static void afficherTout() throws IOException
           salaire=sortie.readDouble();
          
    
-          i+=t_enreg;
+        //  i+=t_enreg;
          
 
           
@@ -183,7 +176,6 @@ public static void afficherTout() throws IOException
       sortie.seek(pos);
   
       num=sortie.readInt();
-  
       nom=sortie.readUTF();
       prenom=sortie.readUTF();
   
@@ -199,29 +191,25 @@ public static void afficherTout() throws IOException
       JOptionPane.showMessageDialog(null, "Employé :"+num+" n existe pas !", "Message", JOptionPane.PLAIN_MESSAGE);
     }
 
-
+  sortie.close();
 
   }
-    ///////////////////
-      ///////////// ajouter 
+ 
       public static void ajouter() throws IOException
 
       {
         sortie = new RandomAccessFile(fichier, "rw");
     
-        int num;
-        int id;
-        String nom;
-        String prenom;
+        int num,id;
+        String nom,prenom;
         Boolean trouv=false;
         Double salaire;
-        int i=0;
+      
         num=Integer.parseInt(JOptionPane.showInputDialog("Entrer le numero de l employe:"));
         try{
         while(true)
         {
-          
-            sortie.seek(i);
+     
             id = sortie.readInt();
             if(id==num){
               trouv=true;
@@ -232,13 +220,7 @@ public static void afficherTout() throws IOException
             prenom=sortie.readUTF();
            
             salaire=sortie.readDouble();
-           
-     
-            i+=t_enreg;
-           
-
-            
-
+    
         }
       
       }
@@ -250,8 +232,6 @@ public static void afficherTout() throws IOException
         if(trouv==true){
           
           JOptionPane.showMessageDialog(null, "Employé :"+num+" existe déja !", "Message", JOptionPane.PLAIN_MESSAGE);
-
-
         }
          
         else{ 
@@ -265,13 +245,13 @@ public static void afficherTout() throws IOException
     
          sortie.writeInt(num);
     
-         sortie.writeUTF(nom);
-         sortie.writeUTF(prenom);
+         sortie.writeUTF(formaterString(nom,tnom) );
+         sortie.writeUTF(formaterString(prenom,tnom));
     
          sortie.writeDouble(salaire);
          JOptionPane.showMessageDialog(null, "Employé :"+num+" ajouté avec succés!", "Message", JOptionPane.PLAIN_MESSAGE);}
         
-    
+         sortie.close();
       }
 
   
@@ -280,7 +260,7 @@ public static void afficherTout() throws IOException
 
   {
     sortie = new RandomAccessFile(fichier, "rw");
-    int i=0;
+  
     Double somme=Double.parseDouble("0");
  
     //df.format(salaire);
@@ -289,13 +269,11 @@ public static void afficherTout() throws IOException
     try
     {
       while(true){
-        sortie.seek(i);
         sortie.readInt();
         sortie.readUTF();
         sortie.readUTF();
         somme+=sortie.readDouble();
        System.out.println(somme);
-       i+=t_enreg;
         compteur++;
       }
    //   System.out.println(somme/compteur);
@@ -306,50 +284,40 @@ public static void afficherTout() throws IOException
         System.out.println("End of file reached!");
     }
   
-
-   
-    
-   
     System.out.println(somme/compteur);
     
   JOptionPane.showMessageDialog(null,"Salaire moyen : "+df.format(somme/compteur) );
+  sortie.close();
   }
 /////////////////modifier salaire/////////////////
 public static void ModifierSalaire() throws IOException
 
 {
-  String nom;
-  String prenom;
-  Double salaire;
   sortie = new RandomAccessFile(fichier, "rw");
+
+
   Double nouveauSalaire;
+
   Long pos;
   int num; int id;
 
   boolean trouv=false;
-  int i=0;
+
   num=Integer.parseInt(JOptionPane.showInputDialog("Entrer le numero de l employe:"));
   try{
   while(true)
   {
-    
-      sortie.seek(i);
       id = sortie.readInt();
       if(id==num){
         trouv=true;
         System.out.println("pas trouvee");
       }
-     nom=sortie.readUTF();
+     sortie.readUTF();
       
-      prenom=sortie.readUTF();
+     sortie.readUTF();
      
-      salaire=sortie.readDouble();
-     
-
-      i+=t_enreg;
-     
-
-      
+      sortie.readDouble();
+   
 
   }
 
@@ -375,13 +343,7 @@ public static void ModifierSalaire() throws IOException
     JOptionPane.showMessageDialog(null, "Employé :"+num+" n existe pas!", "Message", JOptionPane.PLAIN_MESSAGE);
   }
 
- 
-
-  //affichage=new JTextArea();
-  //afficher();
- // JOptionPane.showMessageDialog(null, affichage, "Liste des employés", JOptionPane.PLAIN_MESSAGE);
-
-
+ sortie.close();
 
 }
 ////////// supprimer un employe///////////////
@@ -390,34 +352,24 @@ public static void SupprimerEmploye() throws IOException{
   
   Long pos;
   int num;
-  int i=0;
   int id;
   Boolean trouv=false;
-  String nom; String prenom;
-  Double salaire;
+ 
   num=Integer.parseInt(JOptionPane.showInputDialog("Entrer le numero de l'employe a supprimer"));
   try{
     while(true)
     {
-      
-        sortie.seek(i);
         id = sortie.readInt();
         if(id==num){
           trouv=true;
           System.out.println("trouvee");
         }
-        nom=sortie.readUTF();
+        sortie.readUTF();
         
-        prenom=sortie.readUTF();
+        sortie.readUTF();
        
-        salaire=sortie.readDouble();
-       
-  
-        i+=t_enreg;
-       
-  
-        
-  
+        sortie.readDouble();
+ 
     }
   
   }
@@ -437,6 +389,7 @@ public static void SupprimerEmploye() throws IOException{
   else{
     JOptionPane.showMessageDialog(null, "Employé :"+num+" n existe pas!", "Message", JOptionPane.PLAIN_MESSAGE);
   }
+  sortie.close();
 }
    
 ///////////////// main //////////////////
