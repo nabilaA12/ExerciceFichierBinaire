@@ -330,7 +330,7 @@ public static void ModifierSalaire() throws IOException
   if(trouv==true){
     
     pos=getAdresse(num);
-    sortie.seek(pos);
+    sortie.seek(pos); // on peut faire sortie.seek(pos+4+20+20+4) et on retire sortie.readInt(); et sortie.readUTF(); et sortie.readUTF();
     nouveauSalaire=Double.parseDouble(JOptionPane.showInputDialog("Entrer le nouveau salaire de l'employé: "+num));
     sortie.readInt();
     sortie.readUTF();
